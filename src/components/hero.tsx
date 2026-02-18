@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Download, ArrowDown, Sparkles } from 'lucide-react';
 
 const GITHUB_OWNER = 'KNIGHTABDO';
 const GITHUB_REPO = 'relearn';
+const VIDEO_BG = 'https://lh3.googleusercontent.com/d/1-xtbgBGKAHZi3Al4EhjjJ_sPPSAftsNt';
 
 interface Release {
   tag_name: string;
@@ -35,7 +36,7 @@ function getAssetForOS(assets: Release['assets'], os: string) {
 export default function Hero() {
   const [release, setRelease] = useState<Release | null>(null);
   const [os, setOs] = useState('windows');
-  const [videoUrl, setVideoUrl] = useState('');
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setOs(getOS());
@@ -49,34 +50,47 @@ export default function Hero() {
   const osLabel = os === 'macos' ? 'macOS' : os === 'linux' ? 'Linux' : 'Windows';
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center hero-gradient pt-16">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+      {/* Video background */}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ filter: 'brightness(0.4) saturate(1.2)' }}
+      >
+        <source src={VIDEO_BG} type="video/mp4" />
+      </video>
+
+      {/* Overlay gradients */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#030014]/60 via-[#030014]/30 to-[#030014]/90 z-[1]" />
+      <div className="absolute inset-0 hero-gradient z-[2]" />
+
       {/* Animated gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-purple/20 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-blue/15 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-      <div className="absolute top-1/2 right-1/3 w-60 h-60 bg-brand-cyan/10 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }} />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-purple/20 rounded-full blur-[120px] animate-pulse z-[2]" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-brand-blue/15 rounded-full blur-[100px] animate-pulse z-[2]" style={{ animationDelay: '1s' }} />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-8 animate-slide-up">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-8 animate-slide-up">
           <Sparkles size={14} className="text-brand-purple" />
           <span className="text-xs font-medium text-gray-300">100% Free &middot; No Account Required &middot; Your Data Stays Local</span>
         </div>
 
-        {/* Heading */}
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <span className="text-white">Study Smarter</span>
+          <span className="text-white drop-shadow-2xl">Study Smarter</span>
           <br />
           <span className="bg-gradient-to-r from-brand-purple via-brand-blue to-brand-cyan bg-clip-text text-transparent">
             with AI
           </span>
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+        <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 animate-slide-up drop-shadow-lg" style={{ animationDelay: '0.2s' }}>
           Upload your PDFs, videos, or notes. Get AI-generated flashcards, quizzes, mind maps, podcasts, study plans, and more. All on your desktop, completely free.
         </p>
 
-        {/* CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up" style={{ animationDelay: '0.3s' }}>
           {asset ? (
             <a href={asset.browser_download_url} className="download-btn px-8 py-4 rounded-2xl text-lg font-semibold text-white flex items-center gap-3 group">
@@ -91,23 +105,21 @@ export default function Hero() {
             </a>
           )}
           <a href="https://github.com/KNIGHTABDO/relearn" target="_blank"
-             className="px-8 py-4 rounded-2xl text-lg font-medium text-gray-300 border border-white/10 hover:border-white/20 hover:bg-white/5 transition flex items-center gap-2">
+             className="px-8 py-4 rounded-2xl text-lg font-medium text-gray-200 border border-white/20 hover:border-white/30 hover:bg-white/10 backdrop-blur-sm transition flex items-center gap-2">
             View on GitHub
           </a>
         </div>
 
-        {/* Platform tags */}
-        <div className="flex items-center justify-center gap-6 text-sm text-gray-500 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+        <div className="flex items-center justify-center gap-6 text-sm text-gray-400 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <span>Windows</span>
-          <span className="w-1 h-1 rounded-full bg-gray-700" />
+          <span className="w-1 h-1 rounded-full bg-gray-600" />
           <span>macOS (ARM + Intel)</span>
-          <span className="w-1 h-1 rounded-full bg-gray-700" />
+          <span className="w-1 h-1 rounded-full bg-gray-600" />
           <span>Linux</span>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ArrowDown size={20} className="text-gray-600" />
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10">
+          <ArrowDown size={20} className="text-gray-500" />
         </div>
       </div>
     </section>
