@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     description: 'Transform study materials into interactive learning experiences with AI.',
     type: 'website',
   },
+  verification: {
+    google: 'K2-GMrO-KnsYayt4O4uIdjyGMtAMbKGNPaFG34lFlsA',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

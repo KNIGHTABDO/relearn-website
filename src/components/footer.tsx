@@ -15,6 +15,8 @@ export default function Footer() {
 
         <div className="flex items-center gap-6 text-sm text-gray-400">
           <Link href="/changelog" className="hover:text-white transition">Changelog</Link>
+          <Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-white transition">Terms</Link>
           <a href="https://github.com/KNIGHTABDO/relearn" target="_blank" className="hover:text-white transition flex items-center gap-1">
             <Github size={14} /> GitHub
           </a>
